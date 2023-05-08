@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using AndroidKotlin.Auth.Services;
 
 namespace AndroidKotlin.Auth
 {
@@ -56,7 +57,7 @@ namespace AndroidKotlin.Auth
                 .AddAspNetIdentity<ApplicationUser>();
 
             // not recommended for production - you need to store your key material somewhere secure
-            builder.AddDeveloperSigningCredential();
+            builder.AddDeveloperSigningCredential().AddResourceOwnerValidator<IdentityResourceOwnerPasswordValidator>();
 
             //services.AddAuthentication()
             //    .AddGoogle(options =>
