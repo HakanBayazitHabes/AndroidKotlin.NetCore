@@ -1,4 +1,5 @@
 ﻿using AndroidKotlin.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Formatter;
@@ -8,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AndroidKotlin.API.Controllers
 {
-
+    [Authorize]
     public class ProductsController : ODataController
     {
         private readonly AppDbContext _context;

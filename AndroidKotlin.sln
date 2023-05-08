@@ -5,7 +5,9 @@ VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AndroidKotlin.Auth", "AndroidKotlin.Auth\AndroidKotlin.Auth.csproj", "{C7BA5ECB-60FD-4A8B-895F-4E8C031FF7E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndroidKotlin.API", "AndroidKotlin.API\AndroidKotlin.API.csproj", "{942269F8-19FF-4A8C-8CA3-8CB123F2350F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AndroidKotlin.API", "AndroidKotlin.API\AndroidKotlin.API.csproj", "{942269F8-19FF-4A8C-8CA3-8CB123F2350F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndroidKotlin.Photo.API", "AndroidKotlin.Photo.API\AndroidKotlin.Photo.API.csproj", "{47B235F4-35B0-4150-BDE1-EB41B4425B89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{942269F8-19FF-4A8C-8CA3-8CB123F2350F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{942269F8-19FF-4A8C-8CA3-8CB123F2350F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{942269F8-19FF-4A8C-8CA3-8CB123F2350F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47B235F4-35B0-4150-BDE1-EB41B4425B89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47B235F4-35B0-4150-BDE1-EB41B4425B89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47B235F4-35B0-4150-BDE1-EB41B4425B89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47B235F4-35B0-4150-BDE1-EB41B4425B89}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

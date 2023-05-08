@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+{
+    options.Authority = "http://localhost:5001";
+    options.Audience = "resource_product_api";
+    options.RequireHttpsMetadata = false;
+});
+
 static IEdmModel GetEdmModel()
 {
     ODataConventionModelBuilder builder = new();
@@ -23,7 +32,7 @@ static IEdmModel GetEdmModel()
     return builder.GetEdmModel();
 }
 
-builder.Services.AddControllers().AddOData(opt => opt.AddRouteComponents("odata",GetEdmModel()).Filter().Select().Expand().OrderBy().SetMaxTop(null).Count());
+builder.Services.AddControllers().AddOData(opt => opt.AddRouteComponents("odata", GetEdmModel()).Filter().Select().Expand().OrderBy().SetMaxTop(null).Count());
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen();
@@ -38,7 +47,6 @@ if (app.Environment.IsDevelopment())
 }
 
 
-app.UseAuthorization();
 
 //var builderOdata = new ODataConventionModelBuilder();
 
@@ -47,8 +55,10 @@ app.UseAuthorization();
 //builderOdata.EntitySet<Product>("Products");
 //builderOdata.EntitySet<Category>("Categories");
 
-app.UseHttpsRedirection();
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 //app.UseEndpoints(endpoints =>
 //{
 //    endpoints.Select().Expand().Filter().OrderBy().Count();
