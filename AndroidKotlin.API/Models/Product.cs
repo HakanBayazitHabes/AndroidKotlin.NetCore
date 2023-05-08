@@ -10,7 +10,7 @@
         public string Color { get; set; }
 
         public int Stock { get; set; }
-        public string PhotoPath { get; set; }
+        public string? PhotoPath { get; set; }
         public int Category_Id { get; set; }
         public virtual Category Category { get; set; }
     }

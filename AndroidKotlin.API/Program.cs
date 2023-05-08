@@ -1,7 +1,9 @@
 using AndroidKotlin.API.Models;
-using Microsoft.AspNet.OData.Builder;
-using Microsoft.AspNet.OData.Extensions;
+using Microsoft.AspNetCore.OData.Extensions;
+using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OData.Edm;
+using Microsoft.OData.ModelBuilder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,10 +13,17 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+static IEdmModel GetEdmModel()
+{
+    ODataConventionModelBuilder builder = new();
+    builder.EntitySet<Category>("Categories");
+    builder.EntitySet<Product>("Products");
 
-builder.Services.AddOData();
 
-builder.Services.AddControllers();
+    return builder.GetEdmModel();
+}
+
+builder.Services.AddControllers().AddOData(opt => opt.AddRouteComponents("odata",GetEdmModel()).Filter().Select().Expand().OrderBy().SetMaxTop(null).Count());
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen();
@@ -28,25 +37,26 @@ if (app.Environment.IsDevelopment())
     //app.UseSwaggerUI();
 }
 
+
 app.UseAuthorization();
 
-var builderOdata = new ODataConventionModelBuilder();
-
-//ProductsController
-builderOdata.EntitySet<Product>("Products");
-builderOdata.EntitySet<Category>("Categories");
+//var builderOdata = new ODataConventionModelBuilder();
 
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.Select().Expand().Filter().OrderBy().Count();
-    //odata/products
-    endpoints.MapODataRoute("odata", "odata", builderOdata.GetEdmModel());
+////ProductsController
+//builderOdata.EntitySet<Product>("Products");
+//builderOdata.EntitySet<Category>("Categories");
 
-    endpoints.MapControllers();
-});
+app.UseHttpsRedirection();
+app.UseRouting();
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.Select().Expand().Filter().OrderBy().Count();
+//    //odata/products
+//    endpoints.MapODataRoute("odata", "odata", builderOdata.GetEdmModel());
 
+//    endpoints.MapControllers();
+//});
 
 app.MapControllers();
-
 app.Run();
