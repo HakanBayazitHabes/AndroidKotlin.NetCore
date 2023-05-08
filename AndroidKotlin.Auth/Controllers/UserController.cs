@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.JsonWebTokens;
+using System.Linq;
 using System.Threading.Tasks;
 using static IdentityServer4.IdentityServerConstants;
 
@@ -10,6 +12,7 @@ namespace AndroidKotlin.Auth.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize(LocalApi.PolicyName)]
     public class UserController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -19,12 +22,12 @@ namespace AndroidKotlin.Auth.Controllers
             _userManager = userManager;
         }
 
-        [Authorize(LocalApi.PolicyName)]
         public IActionResult Test()
         {
             return Ok("Test"); 
-        }   
+        }
 
+        [HttpPost]
         public async Task<IActionResult> SignUp(SignUpViewModel signUp)
         {
             var user = new ApplicationUser
@@ -41,9 +44,24 @@ namespace AndroidKotlin.Auth.Controllers
                 return BadRequest(result.Errors);
             } 
 
-
-
             return NoContent();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> GetUser()
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub);
+
+            if (userIdClaim == null) return BadRequest();
+
+            var user = await _userManager.FindByIdAsync(userIdClaim.Value);
+
+            if (user == null) return BadRequest();
+
+            var userDto = new ApplicationUser { UserName = user.UserName, Email = user.Email, City = user.City };
+
+            return Ok(userDto);
         }
     }
 }
