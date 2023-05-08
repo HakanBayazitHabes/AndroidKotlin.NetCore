@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AndroidKotlin.Auth.Services;
+using FluentValidation.AspNetCore;
 
 namespace AndroidKotlin.Auth
 {
@@ -31,7 +32,10 @@ namespace AndroidKotlin.Auth
         {
             services.AddLocalApiAuthentication();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddFluentValidation(options =>
+            {
+                 options.RegisterValidatorsFromAssemblyContaining<Startup>();
+            });
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
