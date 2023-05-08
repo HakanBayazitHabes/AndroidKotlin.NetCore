@@ -2,6 +2,7 @@
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AndroidKotlin.API.Controllers
 {
@@ -26,6 +27,26 @@ namespace AndroidKotlin.API.Controllers
         {
             return Ok(_context.Products.Where(x => x.Id == key));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> PostProduct([FromBody]Product product)
+        {
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+            return Ok(product);
+        }
+
+        //odata/Products(4)
+        [HttpPut]
+        public async Task<IActionResult> PutProduct([FromODataUri] int key, [FromBody] Product product)
+        {
+            product.Id = key;
+
+            _context.Entry(product).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
 
     }
 }
