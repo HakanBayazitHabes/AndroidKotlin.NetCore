@@ -1,4 +1,5 @@
 ﻿using AndroidKotlin.API.Models;
+using AndroidKotlin.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +36,7 @@ namespace AndroidKotlin.API.Controllers
         [HttpPost]
         public async Task<IActionResult> PostProduct([FromBody]Product product)
         {
+            throw new CustomException("Custom bir hata gerçekleşti");     
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
             return Ok(product);

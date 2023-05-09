@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OData.Edm;
 using Microsoft.OData.ModelBuilder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using AndroidKotlin.Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,7 +47,7 @@ if (app.Environment.IsDevelopment())
     //app.UseSwaggerUI();
 }
 
-
+app.UseCustomException();
 
 //var builderOdata = new ODataConventionModelBuilder();
 

@@ -14,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AndroidKotlin.Auth.Services;
 using FluentValidation.AspNetCore;
+using AndroidKotlin.Shared.Extensions;
+
 
 namespace AndroidKotlin.Auth
 {
@@ -30,12 +32,15 @@ namespace AndroidKotlin.Auth
 
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddLocalApiAuthentication();
 
             services.AddControllersWithViews().AddFluentValidation(options =>
             {
                  options.RegisterValidatorsFromAssemblyContaining<Startup>();
             });
+
+            services.UseCustomValidationResponse();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -83,7 +88,7 @@ namespace AndroidKotlin.Auth
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
-
+            app.UseCustomException();
             app.UseStaticFiles();
 
             app.UseRouting();
