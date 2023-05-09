@@ -7,6 +7,7 @@ using Microsoft.OData.ModelBuilder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using AndroidKotlin.Shared.Extensions;
 using FluentValidation.AspNetCore;
+using AndroidKotlin.Shared.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +35,10 @@ static IEdmModel GetEdmModel()
     return builder.GetEdmModel();
 }
 
-builder.Services.AddControllers().AddOData(opt => opt.AddRouteComponents("odata", GetEdmModel()).Filter().Select().Expand().OrderBy().SetMaxTop(null).Count()).AddFluentValidation(options =>
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidateModelAttribute>();
+}).AddOData(opt => opt.AddRouteComponents("odata", GetEdmModel()).Filter().Select().Expand().OrderBy().SetMaxTop(null).Count()).AddFluentValidation(options =>
 {
     options.RegisterValidatorsFromAssemblyContaining<Program>();
 }); ;
