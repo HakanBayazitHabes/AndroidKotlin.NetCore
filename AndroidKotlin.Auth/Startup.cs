@@ -37,7 +37,7 @@ namespace AndroidKotlin.Auth
 
             services.AddControllersWithViews().AddFluentValidation(options =>
             {
-                 options.RegisterValidatorsFromAssemblyContaining<Startup>();
+                options.RegisterValidatorsFromAssemblyContaining<Startup>();
             });
 
             services.UseCustomValidationResponse();
@@ -45,9 +45,14 @@ namespace AndroidKotlin.Auth
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(option =>
+            {
+                option.User.RequireUniqueEmail = true;
+                option.Password.RequireNonAlphanumeric = false;
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders()
+                .AddErrorDescriber<CustomIdentityErrorDescriber>();
 
             var builder = services.AddIdentityServer(options =>
             {
@@ -72,7 +77,7 @@ namespace AndroidKotlin.Auth
             //    .AddGoogle(options =>
             //    {
             //        options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                    
+
             //        // register your IdentityServer with Google at https://console.developers.google.com
             //        // enable the Google+ API
             //        // set the redirect URI to https://localhost:5001/signin-google
