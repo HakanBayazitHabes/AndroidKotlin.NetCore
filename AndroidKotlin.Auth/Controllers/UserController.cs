@@ -1,4 +1,5 @@
 ﻿using AndroidKotlin.Auth.Models;
+using AndroidKotlin.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -24,7 +25,7 @@ namespace AndroidKotlin.Auth.Controllers
 
         public IActionResult Test()
         {
-            return Ok("Test"); 
+            return Ok("Test");
         }
 
         [HttpPost]
@@ -41,8 +42,13 @@ namespace AndroidKotlin.Auth.Controllers
 
             if (!result.Succeeded)
             {
-                return BadRequest(result.Errors);
-            } 
+                var errorDto = new ErrorDto();
+                errorDto.Status = 400;
+                errorDto.IsShow = true;
+                errorDto.Errors.AddRange(result.Errors.Select(x => x.Description).ToList());
+
+                return BadRequest(errorDto);
+            }
 
             return NoContent();
         }
