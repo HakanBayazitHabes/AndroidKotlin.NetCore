@@ -12,7 +12,7 @@ namespace AndroidKotlin.Shared.Extensions
         {
             app.Use(async (context, next) =>
             {
-                await Task.Delay(1000);
+                await Task.Delay(4000);
                 await next.Invoke();
             });
         }
